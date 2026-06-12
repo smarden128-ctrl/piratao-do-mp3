@@ -13,7 +13,10 @@ python3 -m yt_dlp --version || true
 python3 -m spotdl --version || true
 
 echo "=== Instalando pnpm ==="
+npm config set prefix "$HOME/.npm-global"
+mkdir -p "$HOME/.npm-global/bin"
 npm install -g pnpm
+export PATH="$HOME/.npm-global/bin:$PATH"
 
 echo "=== Instalando dependências Node.js ==="
 pnpm install
