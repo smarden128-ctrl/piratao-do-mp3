@@ -1,0 +1,131 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: MP3 Downloader API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: download
+    description: Download operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /download/start:
+    post:
+      operationId: startDownload
+      tags: [download]
+      summary: Start a download job
+      description: Starts an async MP3 download job from Spotify or YouTube
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DownloadRequest"
+      responses:
+        "201":
+          description: Job started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadJob"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /download/{jobId}:
+    get:
+      operationId: getDownloadJob
+      tags: [download]
+      summary: Get download job status
+      description: Returns the current status of a download job
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadJob"
+        "404":
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    DownloadRequest:
+      type: object
+      required:
+        - url
+        - source
+      properties:
+        url:
+          type: string
+          description: The Spotify or YouTube URL to download
+        source:
+          type: string
+          enum: [spotify, youtube]
+          description: The source platform
+    DownloadJob:
+      type: object
+      required:
+        - jobId
+        - status
+        - source
+        - url
+      properties:
+        jobId:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, done, error]
+        source:
+          type: string
+          enum: [spotify, youtube]
+        url:
+          type: string
+        filename:
+          type: ["string", "null"]
+        errorMessage:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
