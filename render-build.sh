@@ -14,7 +14,7 @@ pip3 install yt-dlp spotdl
 echo "=== Instalando pnpm ==="
 npm config set prefix "$HOME/.npm-global"
 mkdir -p "$HOME/.npm-global/bin"
-npm install -g pnpm
+npm install -g pnpm@10
 export PATH="$HOME/.npm-global/bin:$PATH"
 echo "pnpm encontrado em: $(which pnpm)"
 pnpm --version
