@@ -6,7 +6,7 @@ ffmpeg -version | head -1 || echo "Aviso: ffmpeg não encontrado"
 python3 --version
 
 echo "=== Instalando ferramentas Python ==="
-pip3 install --user yt-dlp spotdl
+pip3 install yt-dlp spotdl
 
 echo "=== Verificando instalações ==="
 python3 -m yt_dlp --version || true
