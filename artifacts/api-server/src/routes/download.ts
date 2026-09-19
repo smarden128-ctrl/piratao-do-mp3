@@ -52,6 +52,8 @@ function runDownload(job: DownloadJob) {
     command = "yt-dlp";
     args = [
       "--no-playlist",
+      "--js-runtimes", "node",
+      "--extractor-args", "youtube:player_client=mweb",
       "-x",
       "--audio-format", "mp3",
       "-o", path.join(jobDir, "%(title)s.%(ext)s"),
